@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class UnidadeConsumidora implements Serializable {
 
     public enum Tipo {
-        RESIDENCIAL, COMERCIAL, INDUSTRIAL, ESSENCIAL, EMERGENCIA
+        residencial, comercial, industrial, essencial, emergencia
     }
 
     @Id

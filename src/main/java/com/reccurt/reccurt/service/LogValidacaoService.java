@@ -22,29 +22,24 @@ public class LogValidacaoService {
         List<LogValidacao> logs;
 
         if (ucId != null && dataInicio != null && dataFim != null) {
-            // Filtrar por UC e período
             logs = logValidacaoRepository.findByUcId(ucId).stream()
                     .filter(log -> isDentroDoPeriodo(log.getDataHoraValidacao(), dataInicio, dataFim))
-                    .sorted((a, b) -> b.getDataHoraValidacao().compareTo(a.getDataHoraValidacao())) // ✅ ORDENAR
+                    .sorted((a, b) -> b.getDataHoraValidacao().compareTo(a.getDataHoraValidacao()))
                     .collect(Collectors.toList());
         } else if (ucId != null) {
-            // Filtrar apenas por UC (já vem ordenado do repository)
             logs = logValidacaoRepository.findByUcId(ucId);
         } else if (dataInicio != null && dataFim != null) {
-            // ✅ CORREÇÃO: Ordenar manualmente
             logs = logValidacaoRepository.findByDataHoraValidacaoBetween(dataInicio, dataFim)
                     .stream()
-                    .sorted((a, b) -> b.getDataHoraValidacao().compareTo(a.getDataHoraValidacao())) // ✅ ORDENAR DESC
+                    .sorted((a, b) -> b.getDataHoraValidacao().compareTo(a.getDataHoraValidacao()))
                     .collect(Collectors.toList());
         } else {
-            // Sem filtros - retornar últimos registros ordenados
             logs = logValidacaoRepository.findAll().stream()
-                    .sorted((a, b) -> b.getDataHoraValidacao().compareTo(a.getDataHoraValidacao())) // ✅ ORDENAR
+                    .sorted((a, b) -> b.getDataHoraValidacao().compareTo(a.getDataHoraValidacao()))
                     .limit(100)
                     .collect(Collectors.toList());
         }
 
-        // Converter para DTO de resposta
         List<ComandoHistoryResponse.ComandoHistoryItem> itens = logs.stream()
                 .map(this::converterParaHistoryItem)
                 .collect(Collectors.toList());

@@ -11,9 +11,12 @@ import java.util.List;
 
 @Repository
 public interface FeriadoRepository extends JpaRepository<Feriado, Long> {
-    List<Feriado> findByData(LocalDate data);
 
-    @Query("SELECT f FROM Feriado f WHERE f.data = :data AND (f.tipo = 'NACIONAL' OR f.regiao = :regiao)")
-    List<Feriado> findByDataAndRegiaoOuNacional(@Param("data") LocalDate data,
-                                                @Param("regiao") String regiao);
+    @Query("SELECT f FROM Feriado f WHERE f.data = :data")
+    List<Feriado> findByData(@Param("data") LocalDate data);
+
+    @Query("SELECT f FROM Feriado f WHERE f.data = :data AND (f.tipo = 'nacional' OR f.regiao = :regiao)")
+    List<Feriado> findByDataERegiao(@Param("data") LocalDate data, @Param("regiao") String regiao);
+
+    List<Feriado> findByDataBetween(LocalDate data1, LocalDate data2);
 }

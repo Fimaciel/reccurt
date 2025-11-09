@@ -8,9 +8,8 @@ import java.time.LocalDate;
 public class Feriado {
 
     public enum TipoFeriado {
-        NACIONAL, REGIONAL
+        nacional, regional
     }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

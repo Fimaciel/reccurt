@@ -19,7 +19,7 @@ CREATE TABLE comando (
     tipo_comando VARCHAR(20) NOT NULL CHECK (tipo_comando IN ('corte', 'religacao')),
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
     solicitante VARCHAR(100) NOT NULL,
-    aprovado BOOLEAN,
+    aprovado BOOLEAN NOT NULL,
     motivo TEXT,
     prazo_execucao TIMESTAMP WITH TIME ZONE,
     FOREIGN KEY (uc_id) REFERENCES unidade_consumidora (id)
@@ -29,7 +29,7 @@ CREATE TABLE log_validacao (
     id SERIAL PRIMARY KEY,
     comando_id INT NOT NULL REFERENCES comando(id) ON DELETE CASCADE,
     data_validacao TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    resultado VARCHAR(20) NOT NULL CHECK (resultado IN ('aprovado', 'bloqueado')),
+    aprovado VARCHAR(20) NOT NULL,
     motivo TEXT NOT NULL,
     usuario VARCHAR(100) NOT NULL
 );

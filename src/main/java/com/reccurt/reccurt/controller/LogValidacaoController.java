@@ -8,7 +8,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @RestController
 @RequestMapping("/api/commands")
@@ -25,10 +27,13 @@ public class LogValidacaoController {
     @GetMapping("/history")
     public ResponseEntity<ComandoHistoryResponse> consultarHistorico(
             @RequestParam(required = false) String ucId,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInicio,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFim) {
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim) {
 
-        ComandoHistoryResponse response = logValidacaoService.consultarHistorico(ucId, dataInicio, dataFim);
+        LocalDateTime inicio = dataInicio != null ? dataInicio.atStartOfDay() : null;
+        LocalDateTime fim = dataFim != null ? dataFim.atTime(LocalTime.MAX) : null;
+
+        ComandoHistoryResponse response = logValidacaoService.consultarHistorico(ucId, inicio, fim);
         return ResponseEntity.ok(response);
     }
 }

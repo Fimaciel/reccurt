@@ -2,6 +2,7 @@ package com.reccurt.reccurt.controller;
 
 import com.reccurt.reccurt.dto.FeriadoCreateRequest;
 import com.reccurt.reccurt.dto.FeriadoCreateResponse;
+import com.reccurt.reccurt.model.Feriado;
 import com.reccurt.reccurt.service.FeriadoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,9 +33,10 @@ public class FeriadoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @Operation(summary = "Listar feriados", description = "Retorna a lista de todos os feriados cadastrados")
+    @Operation(summary = "Listar feriados", description = "Retorna todos os feriados cadastrados")
     @GetMapping
-    public ResponseEntity<List<?>> listarFeriados() {
-        return ResponseEntity.ok(feriadoService.listarTodosFeriados());
+    public ResponseEntity<List<Feriado>> listarFeriados() {
+        List<Feriado> feriados = feriadoService.listarTodosFeriados();
+        return ResponseEntity.ok(feriados);
     }
 }

@@ -21,7 +21,7 @@ public class LogValidacao {
     @Column(length = 255)
     private String motivo;
 
-    @Column(nullable = false)
+    @Column(name = "data_validacao", nullable = false)
     private LocalDateTime dataHoraValidacao;
 
     @Column(nullable = false)

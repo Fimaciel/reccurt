@@ -18,24 +18,18 @@ public class FeriadoService {
     }
 
     public FeriadoCreateResponse criarFeriado(FeriadoCreateRequest request) {
-        List<Feriado> feriadosExistentes = feriadoRepository.findByDataAndRegiaoOuNacional(
-                request.getData(),
-                request.getRegiao()
-        );
-
-        if (!feriadosExistentes.isEmpty()) {
-            throw new IllegalArgumentException("Já existe um feriado cadastrado para esta data e região");
+        if (request.getNome() == null || request.getNome().trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome do feriado é obrigatório");
+        }
+        if (request.getTipo() == null || request.getTipo().trim().isEmpty()) {
+            throw new IllegalArgumentException("Tipo do feriado é obrigatório");
         }
 
-        // Converter tipo para enum
-        Feriado.TipoFeriado tipoFeriado;
-        try {
-            tipoFeriado = Feriado.TipoFeriado.valueOf(request.getTipo().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Tipo de feriado inválido: " + request.getTipo());
-        }
+        Feriado.TipoFeriado tipoFeriado = validarTipo(request.getTipo());
 
-        // Criar e salvar feriado
+        validarRegiao(tipoFeriado, request.getRegiao());
+
+
         Feriado feriado = new Feriado(
                 request.getData(),
                 request.getNome(),
@@ -49,8 +43,34 @@ public class FeriadoService {
                 feriadoSalvo.getId(),
                 feriadoSalvo.getData(),
                 feriadoSalvo.getNome(),
-                feriadoSalvo.getTipo().name()
+                feriadoSalvo.getTipo().name().toLowerCase()
         );
+    }
+
+    private Feriado.TipoFeriado validarTipo(String tipo) {
+        String tipoNormalizado = tipo.trim().toLowerCase();
+
+        if (!tipoNormalizado.equals("nacional") && !tipoNormalizado.equals("regional")) {
+            throw new IllegalArgumentException("Tipo de feriado inválido. Valores permitidos: 'nacional' ou 'regional'");
+        }
+
+        try {
+            return Feriado.TipoFeriado.valueOf(tipoNormalizado.toLowerCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Tipo de feriado inválido: " + tipo);
+        }
+    }
+
+    private void validarRegiao(Feriado.TipoFeriado tipo, String regiao) {
+        if (tipo == Feriado.TipoFeriado.regional) {
+            if (regiao == null || regiao.trim().isEmpty()) {
+                throw new IllegalArgumentException("Região é obrigatória para feriados regionais");
+            }
+        } else {
+            if (regiao != null && !regiao.trim().isEmpty()) {
+                throw new IllegalArgumentException("Região deve ser nula para feriados nacionais");
+            }
+        }
     }
 
     public List<Feriado> listarTodosFeriados() {

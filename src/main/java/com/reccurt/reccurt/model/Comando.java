@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class Comando {
 
     public enum TipoComando {
-        CORTE, RELIGACAO
+        corte, religacao
     }
 
     @Id
