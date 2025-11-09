@@ -156,11 +156,6 @@ Acesse a documentação Swagger em:
 http://localhost:8080/swagger-ui.html
 ```
 
-Documentação OpenAPI JSON:
-```
-http://localhost:8080/v3/api-docs
-```
-
 ## 🗃️ Dados de Teste
 
 ### Unidades Consumidoras Pré-cadastradas
